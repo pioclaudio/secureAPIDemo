@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "extra_config": {},
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "json",
+  "name": "microserviceTest",
+  "endpoints": [
+    {
+      "endpoint": "/sites",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "extra_config": {
+            "github.com/devopsfaith/krakend-jose/validator": {
+            "alg": "RS256",
+            "jwk-url": "http://172.18.102.7:8082/auth/realms/myrealm/protocol/openid-connect/certs",
+            "disable_jwk_security": true
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/api/sites",
+          "encoding": "no-op",
+          "method": "GET",
+          "extra_config": {},
+          "host": [
+            "http://172.18.102.7:9080/sites-api"
+          ],
+          "disable_host_sanitize": true
+        }
+      ]
+    },
+    {
+      "endpoint": "/routes",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "extra_config": {},
+      "backend": [
+        {
+          "url_pattern": "/api/routes",
+          "encoding": "no-op",
+          "sd": "",
+          "method": "GET",
+          "extra_config": {},
+          "disable_host_sanitize": true,
+          "host": [
+            "http://172.18.102.7:9081/bus-api"
+          ]
+        }
+      ]
+    }
+  ]
+}
